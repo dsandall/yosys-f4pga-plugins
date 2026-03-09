@@ -19,6 +19,8 @@
 #define _SELECTION_TO_TCL_LIST_H_
 
 #include "kernel/register.h"
+#include "kernel/yosys.h"
+#include <tcl.h>
 
 USING_YOSYS_NAMESPACE
 

@@ -18,6 +18,8 @@
  */
 
 #include "get_count.h"
+#include "kernel/yosys.h"
+#include <tcl.h>
 
 #include "kernel/rtlil.h"
 

@@ -30,8 +30,10 @@
 #include "kernel/log.h"
 #include "kernel/register.h"
 #include "kernel/rtlil.h"
+#include "kernel/yosys.h"
 #include "libs/json11/json11.hpp"
 #include <cassert>
+#include <tcl.h>
 
 USING_YOSYS_NAMESPACE
 

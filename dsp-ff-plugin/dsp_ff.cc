@@ -20,14 +20,13 @@ struct DspFF : public Pass {
         CellPin(const CellPin &ref) = default;
         CellPin(CellPin &&ref) = default;
 
-        unsigned int hash() const
+        Yosys::hashlib::Hasher hash_into(Yosys::hashlib::Hasher h) const
         {
-            unsigned int h = 0;
             if (cell != nullptr) {
-                h = mkhash_add(h, cell->hash());
+                h.eat(cell->name);
             }
-            h = mkhash_add(h, port.hash());
-            h = mkhash_add(h, bit);
+            h.eat(port);
+            h.eat(bit);
             return h;
         }
 
@@ -163,12 +162,20 @@ struct DspFF : public Pass {
         /// integration.
         dict<RTLIL::IdString, RTLIL::Const> connect;
 
-        unsigned int hash() const
+        Yosys::hashlib::Hasher hash_into(Yosys::hashlib::Hasher h) const
         {
-            unsigned int h = 0;
-            h = mkhash_add(h, params.set.hash());
-            h = mkhash_add(h, params.map.hash());
-            h = mkhash_add(h, connect.hash());
+            for (auto &it : params.set) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
+            for (auto &it : params.map) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
+            for (auto &it : connect) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
             return h;
         }
 
@@ -201,18 +208,26 @@ struct DspFF : public Pass {
             dict<RTLIL::IdString, RTLIL::Const> dsp;
         } params;
 
-        FlopData(const RTLIL::IdString &_type) : type(_type){};
+        FlopData(const RTLIL::IdString &_type) : type(_type) {};
 
         FlopData(const FlopData &ref) = default;
         FlopData(FlopData &&ref) = default;
 
-        unsigned int hash() const
+        Yosys::hashlib::Hasher hash_into(Yosys::hashlib::Hasher h) const
         {
-            unsigned int h = 0;
-            h = mkhash_add(h, type.hash());
-            h = mkhash_add(h, conns.hash());
-            h = mkhash_add(h, params.flop.hash());
-            h = mkhash_add(h, params.dsp.hash());
+            h.eat(type);
+            for (auto &it : conns) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
+            for (auto &it : params.flop) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
+            for (auto &it : params.dsp) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
             return h;
         }
 

@@ -30,11 +30,13 @@
 #include "kernel/log.h"
 #include "kernel/register.h"
 #include "kernel/rtlil.h"
+#include "kernel/yosys.h"
 #include "propagation.h"
 #include "sdc_writer.h"
 #include "set_clock_groups.h"
 #include "set_false_path.h"
 #include "set_max_delay.h"
+#include <tcl.h>
 
 USING_YOSYS_NAMESPACE
 

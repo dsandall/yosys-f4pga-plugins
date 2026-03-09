@@ -62,7 +62,15 @@ struct QlDspSimdPass : public Pass {
         DspConfig(const DspConfig &ref) = default;
         DspConfig(DspConfig &&ref) = default;
 
-        unsigned int hash() const { return connections.hash(); }
+        Yosys::hashlib::Hasher hash_into(Yosys::hashlib::Hasher h) const
+        {
+            for (auto &it : connections) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
+            h.eat(use_cfg_params);
+            return h;
+        }
 
         bool operator==(const DspConfig &ref) const { return connections == ref.connections && use_cfg_params == ref.use_cfg_params; }
     };
@@ -247,9 +255,9 @@ struct QlDspSimdPass : public Pass {
                             log_assert(dsp_a->getParam(RTLIL::escape_id(it)) == dsp_b->getParam(RTLIL::escape_id(it)));
                             auto param = dsp_a->getParam(RTLIL::escape_id(it));
                             if (param.size() > 1) {
-                                mode_bits.insert(mode_bits.end(), param.bits.begin(), param.bits.end());
+                                mode_bits.insert(mode_bits.end(), param.bits().begin(), param.bits().end());
                             } else {
-                                mode_bits.push_back(param.bits[0]);
+                                mode_bits.push_back(param.bits()[0]);
                             }
                         }
                         mode_bits_size += MODE_BITS_EXTENSION_SIZE;

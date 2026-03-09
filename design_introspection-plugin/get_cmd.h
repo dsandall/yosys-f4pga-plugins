@@ -20,6 +20,8 @@
 #define _GET_CMD_H_
 
 #include "kernel/register.h"
+#include "kernel/yosys.h"
+#include <tcl.h>
 
 USING_YOSYS_NAMESPACE
 

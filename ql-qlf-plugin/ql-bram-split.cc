@@ -46,7 +46,14 @@ struct QlBramSplitPass : public Pass {
         BramConfig(const BramConfig &ref) = default;
         BramConfig(BramConfig &&ref) = default;
 
-        unsigned int hash() const { return connections.hash(); }
+        Yosys::hashlib::Hasher hash_into(Yosys::hashlib::Hasher h) const
+        {
+            for (auto &it : connections) {
+                h.eat(it.first);
+                h.eat(it.second);
+            }
+            return h;
+        }
 
         bool operator==(const BramConfig &ref) const { return connections == ref.connections; }
     };

@@ -22,7 +22,9 @@
 #include "get_nets.h"
 #include "get_pins.h"
 #include "get_ports.h"
+#include "kernel/yosys.h"
 #include "selection_to_tcl_list.h"
+#include <tcl.h>
 
 USING_YOSYS_NAMESPACE
 

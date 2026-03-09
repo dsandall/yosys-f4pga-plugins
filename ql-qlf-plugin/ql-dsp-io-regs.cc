@@ -97,14 +97,10 @@ struct QlDspIORegs : public Pass {
 
                 // Get DSP configuration
                 if (use_dsp_cfg_params) {
-                    // Read MODE_BITS at correct indexes
-                    auto mode_bits = &dsp->getParam(RTLIL::escape_id("MODE_BITS"));
-                    RTLIL::Const register_inputs;
-                    register_inputs = mode_bits->bits.at(MODE_BITS_REGISTER_INPUTS_ID);
-                    reg_in_i = register_inputs.as_int();
-
-                    RTLIL::Const output_select;
-                    output_select = mode_bits->extract(MODE_BITS_OUTPUT_SELECT_START_ID, MODE_BITS_OUTPUT_SELECT_WIDTH);
+                    RTLIL::Const mode_bits_copy = dsp->getParam(RTLIL::escape_id("MODE_BITS"));
+                    RTLIL::State register_inputs_bit = mode_bits_copy.bits().at(MODE_BITS_REGISTER_INPUTS_ID);
+                    reg_in_i = (register_inputs_bit == RTLIL::State::S1) ? 1 : 0;
+                    RTLIL::Const output_select = mode_bits_copy.extract(MODE_BITS_OUTPUT_SELECT_START_ID, MODE_BITS_OUTPUT_SELECT_WIDTH);
                     out_sel_i = output_select.as_int();
                 } else {
                     // Read dedicated configuration ports
